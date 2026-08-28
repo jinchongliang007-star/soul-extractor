@@ -1,0 +1,16 @@
+<launch>
+  <node pkg="soul_extractor" type="soul_processor_node" name="soul_processor" output="screen">
+    <param name="input_topic" value="/livox/lidar" />
+    <param name="output_topic" value="/soul/filtered" />
+    <param name="output_path" value="/home/jincl/soul-runtime/public/live.json" />
+    <param name="state_path" value="/home/jincl/soul-runtime/private/memory.state" />
+    <param name="min_range" value="0.35" />
+    <param name="max_range" value="12.0" />
+    <param name="voxel_size" value="0.05" />
+    <param name="background_voxel_size" value="0.10" />
+    <param name="background_seconds" value="15.0" />
+    <param name="background_presence_ratio" value="0.65" />
+    <param name="json_rate" value="2.0" />
+    <param name="forgetting" value="0.9995" />
+  </node>
+</launch>

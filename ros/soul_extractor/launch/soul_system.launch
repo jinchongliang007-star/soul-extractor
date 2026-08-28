@@ -1,0 +1,17 @@
+<launch>
+  <arg name="bd_list" default="100000000000000" />
+  <arg name="publish_freq" default="10.0" />
+
+  <include file="$(find livox_ros_driver)/launch/livox_lidar_rviz.launch">
+    <arg name="bd_list" value="$(arg bd_list)" />
+    <arg name="publish_freq" value="$(arg publish_freq)" />
+    <arg name="xfer_format" value="0" />
+    <arg name="rviz_enable" value="false" />
+    <arg name="rosbag_enable" value="false" />
+  </include>
+
+  <include file="$(find soul_extractor)/launch/soul_processor.launch" />
+
+  <node name="rviz" pkg="rviz" type="rviz" respawn="true"
+        args="-d $(find livox_ros_driver)/config/soul_extractor.rviz" />
+</launch>

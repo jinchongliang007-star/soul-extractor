@@ -1,0 +1,7 @@
+.DS_Store
+*.tmp
+*.tmp.png
+*.log
+site/.next/
+site/dist/
+site/node_modules/

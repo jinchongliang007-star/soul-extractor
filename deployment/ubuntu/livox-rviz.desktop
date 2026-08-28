@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=MID-70 存在场
+Comment=启动 Livox、存在场处理节点和 RViz 双层实时显示
+Exec=bash -lc /home/jincl/soul_livox/start_livox_rviz.sh
+Icon=utilities-terminal
+Terminal=true
+Categories=Development;Science;
