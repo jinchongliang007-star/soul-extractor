@@ -174,21 +174,35 @@ function statusLabel(status?: SoulFieldData['status']) {
 export default function Home() {
   const soulRef = useRef<HTMLElement>(null);
   const [field, setField] = useState<SoulFieldData | null>(null);
+  const [fieldSource, setFieldSource] = useState<'github' | 'snapshot' | null>(null);
 
   useEffect(() => {
     let cancelled = false;
 
     const loadField = async () => {
-      try {
-        const response = await fetch(`/live.json?t=${Date.now()}`, { cache: 'no-store' });
-        if (!response.ok) throw new Error('field unavailable');
-        const data = await response.json() as SoulFieldData;
-        if (data.schema !== 'soul-field/v1' || !Array.isArray(data.particles)) {
-          throw new Error('unexpected field schema');
+      const timestamp = Date.now();
+      const sources = [
+        {
+          name: 'github' as const,
+          url: `https://raw.githubusercontent.com/jinchongliang007-star/soul-extractor/main/data/live.json?t=${timestamp}`,
+        },
+        { name: 'snapshot' as const, url: `/live.json?t=${timestamp}` },
+      ];
+
+      for (const source of sources) {
+        try {
+          const response = await fetch(source.url, { cache: 'no-store' });
+          if (!response.ok) continue;
+          const data = await response.json() as SoulFieldData;
+          if (data.schema !== 'soul-field/v1' || !Array.isArray(data.particles)) continue;
+          if (!cancelled) {
+            setField(data);
+            setFieldSource(source.name);
+          }
+          return;
+        } catch {
+          // Try the embedded snapshot when the GitHub archive is temporarily unavailable.
         }
-        if (!cancelled) setField(data);
-      } catch {
-        // Keep the previous real frame when a refresh fails; the first load uses the simulation.
       }
     };
 
@@ -274,7 +288,11 @@ export default function Home() {
           <div>
             <p>SOUL STATE</p>
             <strong>{statusLabel(field?.status)}</strong>
-            <time>{field ? `MID-70 · ${new Date(field.updated_at).toLocaleString('zh-CN', { hour12: false })}` : 'PROCEDURAL FIELD'}</time>
+            <time>
+              {field
+                ? `${fieldSource === 'github' ? 'GITHUB MEMORY' : 'LOCAL SNAPSHOT'} · ${new Date(field.updated_at).toLocaleString('zh-CN', { hour12: false })}`
+                : 'PROCEDURAL FIELD'}
+            </time>
           </div>
         </div>
 
