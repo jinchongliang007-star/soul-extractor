@@ -25,6 +25,10 @@
           <span class="brand-name">SOUL EXTRACTOR</span>
         </a>
         <div class="nav-status">
+          <button class="audio-toggle" id="audio-toggle" type="button" aria-pressed="false" aria-label="开启环境音乐">
+            <span class="audio-bars" aria-hidden="true"><i></i><i></i><i></i></span>
+            <span id="audio-label">SOUND / OFF</span>
+          </button>
           <a class="github-link" href="https://github.com/jinchongliang007-star/soul-extractor" target="_blank" rel="noreferrer">GITHUB / ARCHIVE</a>
           <p class="system-state" id="system-state"><i></i> SYSTEM / STANDBY</p>
         </div>
@@ -54,30 +58,49 @@
       </section>
 
       <section class="soul-section" id="soul">
-        <canvas class="soul-canvas" id="soul-canvas" aria-label="抽象灵魂粒子能量场"></canvas>
-        <div class="field-noise" aria-hidden="true"></div>
+        <div class="soul-layout">
+          <div class="existence-stage">
+            <canvas class="soul-canvas" id="soul-canvas" aria-label="抽象灵魂粒子能量场"></canvas>
+            <div class="field-noise" aria-hidden="true"></div>
 
-        <header class="soul-header">
-          <p class="eyebrow">THE SOUL / 001</p>
-          <h2>存在场</h2>
-        </header>
+            <header class="soul-header">
+              <p class="eyebrow">THE SOUL / 001</p>
+              <h2>存在场</h2>
+            </header>
 
-        <div class="soul-state" id="soul-state">
-          <span class="live-dot"></span>
-          <div>
-            <p>SOUL STATE</p>
-            <strong id="state-label">模拟回退 / AWAITING SIGNAL</strong>
-            <time id="state-time">PROCEDURAL FIELD</time>
+            <div class="soul-state" id="soul-state">
+              <span class="live-dot"></span>
+              <div>
+                <p>SOUL STATE</p>
+                <strong id="state-label">模拟回退 / AWAITING SIGNAL</strong>
+                <time id="state-time">PROCEDURAL FIELD</time>
+              </div>
+            </div>
+
+            <div class="soul-meta" aria-label="灵魂状态数据">
+              <div><span>ABSTRACT PARTICLES</span><strong id="particle-count">720</strong></div>
+              <div><span>ACTIVE TIME</span><strong id="active-time">00:00:00</strong></div>
+              <div><span>FIELD ENERGY</span><strong id="field-energy">—</strong></div>
+            </div>
+
+            <p class="interaction-hint" id="interaction-hint">移动指针 · 感受能量场</p>
           </div>
+
+          <figure class="portrait-stage" id="portrait-stage">
+            <div class="portrait-orbit portrait-orbit-one" aria-hidden="true"></div>
+            <div class="portrait-orbit portrait-orbit-two" aria-hidden="true"></div>
+            <div class="portrait-glow" aria-hidden="true"></div>
+            <div class="portrait-shell">
+              <img src="./assets/soul-portrait.webp" alt="数字生命记录者的黑白肖像" width="960" height="1340" />
+              <span class="portrait-scan" aria-hidden="true"></span>
+            </div>
+            <figcaption>
+              <span>PHYSICAL PRESENCE / 001</span>
+              <strong>形体是入口，记忆继续生长。</strong>
+            </figcaption>
+          </figure>
         </div>
 
-        <div class="soul-meta" aria-label="灵魂状态数据">
-          <div><span>ABSTRACT PARTICLES</span><strong id="particle-count">720</strong></div>
-          <div><span>ACTIVE TIME</span><strong id="active-time">00:00:00</strong></div>
-          <div><span>FIELD ENERGY</span><strong id="field-energy">—</strong></div>
-        </div>
-
-        <p class="interaction-hint" id="interaction-hint">移动指针 · 感受能量场</p>
         <p class="disclaimer">ARTISTIC INTERPRETATION · NOT A MEDICAL OR CONSCIOUSNESS MEASUREMENT</p>
       </section>
     </main>

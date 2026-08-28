@@ -1,6 +1,8 @@
 (() => {
   const canvas = document.getElementById('soul-canvas');
   const context = canvas.getContext('2d');
+  const portraitStage = document.getElementById('portrait-stage');
+  const audioToggle = document.getElementById('audio-toggle');
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const labels = {
     idle: '等待唤醒 / IDLE',
@@ -16,6 +18,9 @@
   let pointerY = 0;
   let animationFrame = 0;
   let particles = fallbackParticles();
+  let audioContext = null;
+  let audioMaster = null;
+  let audioPlaying = false;
 
   function fallbackParticles() {
     return Array.from({ length: 720 }, (_, index) => {
@@ -143,6 +148,72 @@
     pointerY = (event.clientY - bounds.top) / bounds.height - 0.5;
     if (reducedMotion) requestAnimationFrame(draw);
   });
+
+  portraitStage.addEventListener('pointermove', (event) => {
+    if (reducedMotion) return;
+    const bounds = portraitStage.getBoundingClientRect();
+    const x = ((event.clientX - bounds.left) / bounds.width - 0.5) * 14;
+    const y = ((event.clientY - bounds.top) / bounds.height - 0.5) * 9;
+    portraitStage.style.setProperty('--portrait-x', `${x}px`);
+    portraitStage.style.setProperty('--portrait-y', `${y}px`);
+  });
+
+  portraitStage.addEventListener('pointerleave', () => {
+    portraitStage.style.setProperty('--portrait-x', '0px');
+    portraitStage.style.setProperty('--portrait-y', '0px');
+  });
+
+  function buildAmbientSound() {
+    const AudioEngine = window.AudioContext || window.webkitAudioContext;
+    if (!AudioEngine) return false;
+    audioContext = new AudioEngine();
+    audioMaster = audioContext.createGain();
+    audioMaster.gain.setValueAtTime(0.0001, audioContext.currentTime);
+    audioMaster.connect(audioContext.destination);
+
+    const filter = audioContext.createBiquadFilter();
+    filter.type = 'lowpass';
+    filter.frequency.value = 520;
+    filter.Q.value = 0.7;
+    filter.connect(audioMaster);
+
+    [55, 82.41, 110].forEach((frequency, index) => {
+      const oscillator = audioContext.createOscillator();
+      const gain = audioContext.createGain();
+      oscillator.type = index === 1 ? 'triangle' : 'sine';
+      oscillator.frequency.value = frequency;
+      oscillator.detune.value = index * 3 - 3;
+      gain.gain.value = index === 1 ? 0.22 : 0.15;
+      oscillator.connect(gain).connect(filter);
+      oscillator.start();
+    });
+
+    const lfo = audioContext.createOscillator();
+    const lfoGain = audioContext.createGain();
+    lfo.frequency.value = 0.07;
+    lfoGain.gain.value = 120;
+    lfo.connect(lfoGain).connect(filter.frequency);
+    lfo.start();
+    return true;
+  }
+
+  async function toggleAmbientSound() {
+    if (!audioContext && !buildAmbientSound()) {
+      document.getElementById('audio-label').textContent = 'SOUND / N.A.';
+      return;
+    }
+    await audioContext.resume();
+    audioPlaying = !audioPlaying;
+    const now = audioContext.currentTime;
+    audioMaster.gain.cancelScheduledValues(now);
+    audioMaster.gain.setValueAtTime(Math.max(audioMaster.gain.value, 0.0001), now);
+    audioMaster.gain.exponentialRampToValueAtTime(audioPlaying ? 0.045 : 0.0001, now + 1.4);
+    audioToggle.setAttribute('aria-pressed', String(audioPlaying));
+    audioToggle.setAttribute('aria-label', audioPlaying ? '关闭环境音乐' : '开启环境音乐');
+    document.getElementById('audio-label').textContent = audioPlaying ? 'SOUND / ON' : 'SOUND / OFF';
+  }
+
+  audioToggle.addEventListener('click', toggleAmbientSound);
   document.getElementById('scroll-cue').addEventListener('click', () => {
     document.getElementById('soul').scrollIntoView({ behavior: reducedMotion ? 'auto' : 'smooth' });
   });
