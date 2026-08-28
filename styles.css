@@ -201,8 +201,9 @@ button, a { color: inherit; }
   z-index: 1;
   display: grid;
   min-height: 100svh;
-  grid-template-rows: minmax(0, 1fr) minmax(0, 1fr);
-  gap: clamp(10px, 1.5vh, 22px);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-rows: minmax(0, 1fr);
+  gap: clamp(12px, 1.5vw, 24px);
   padding: clamp(88px, 11vh, 118px) clamp(24px, 6vw, 96px) clamp(36px, 5vh, 58px);
 }
 
@@ -338,7 +339,7 @@ button, a { color: inherit; }
   .hero-index { display: none; }
   .orbit-one { width: 120vw; }
   .orbit-two { width: 78vw; }
-  .soul-layout { min-height: 118svh; grid-template-rows: minmax(480px, 1.05fr) minmax(460px, .95fr); padding: 76px 12px 28px; }
+  .soul-layout { min-height: 118svh; grid-template-columns: 1fr; grid-template-rows: minmax(480px, 1.05fr) minmax(460px, .95fr); padding: 76px 12px 28px; }
   .soul-header { top: 22px; left: 18px; }
   .soul-state { top: auto; right: 18px; bottom: 100px; }
   .soul-meta { right: 18px; bottom: 10px; left: 18px; grid-template-columns: 1fr 1fr; }
