@@ -2,9 +2,9 @@
 
 用 Livox MID-70 记录身体经过时间的存在，把点云转译成持续生长、缓慢遗忘的抽象数字生命。
 
-![累计存在场](docs/existence-field.png?v=20260828170702)
+![累计存在场](docs/existence-field.png?v=20260829080701)
 
-<!-- FIELD_UPDATED -->最后同步：20260828170702 UTC
+<!-- FIELD_UPDATED -->最后同步：20260829080701 UTC
 
 ## 它保存什么
 
